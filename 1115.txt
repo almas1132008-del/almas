@@ -1,0 +1,30 @@
+#include <semaphore.h>
+
+class FooBar {
+private:
+    int n;
+    sem_t fooSem, barSem;
+
+public:
+    FooBar(int n) {
+        this->n = n;
+        sem_init(&fooSem, 0, 1);  // foo starts allowed
+        sem_init(&barSem, 0, 0);  // bar starts blocked
+    }
+
+    void foo(function<void()> printFoo) {
+        for (int i = 0; i < n; i++) {
+            sem_wait(&fooSem);   // wait for turn
+            printFoo();
+            sem_post(&barSem);   // hand turn to bar
+        }
+    }
+
+    void bar(function<void()> printBar) {
+        for (int i = 0; i < n; i++) {
+            sem_wait(&barSem);   // wait for turn
+            printBar();
+            sem_post(&fooSem);   // hand turn back to foo
+        }
+    }
+};
