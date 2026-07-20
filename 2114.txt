@@ -2,15 +2,17 @@ class Solution {
 public:
     int mostWordsFound(vector<string>& sentences) {
         int maxWords = 0;
-        
-        for (const string& s : sentences) {
-            int words = 1; // no leading/trailing spaces, so words = spaces + 1
-            for (char c : s) {
-                if (c == ' ') words++;
+
+        for (string& sentence : sentences) {
+            int wordCount = 1; // start at 1 since n words = n-1 spaces
+            for (char c : sentence) {
+                if (c == ' ') {
+                    wordCount++;
+                }
             }
-            maxWords = max(maxWords, words);
+            maxWords = max(maxWords, wordCount);
         }
-        
+
         return maxWords;
     }
 };

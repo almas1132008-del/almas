@@ -1,0 +1,34 @@
+/**
+ * @param {*} obj
+ * @param {*} classFunction
+ * @return {boolean}
+ */
+var checkIfInstanceOf = function(obj, classFunction) {
+    // classFunction must be a function, otherwise it's invalid
+    if (typeof classFunction !== 'function') {
+        return false;
+    }
+
+    // null and undefined are never instances of anything
+    if (obj === null || obj === undefined) {
+        return false;
+    }
+
+    // Wrap primitives so we can access their prototype chain
+    // e.g., 5 -> Number object, "abc" -> String object, true -> Boolean object
+    if (typeof obj !== 'object' && typeof obj !== 'function') {
+        obj = Object(obj);
+    }
+
+    // Walk up the prototype chain
+    let proto = Object.getPrototypeOf(obj);
+
+    while (proto !== null) {
+        if (proto === classFunction.prototype) {
+            return true;
+        }
+        proto = Object.getPrototypeOf(proto);
+    }
+
+    return false;
+};
